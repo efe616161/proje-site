@@ -7,106 +7,489 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     
     <style>
+        /* --- GLOBAL BOX-SIZING & RESET --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         /* --- GENEL AYARLAR --- */
         body {
-            margin: 0; padding: 0;
+            margin: 0; 
+            padding: 0;
             font-family: 'Montserrat', sans-serif;
             background-color: #0a0a0a;
             color: #e0e0e0;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        .screen { display: none; min-height: 100vh; width: 100%; animation: fadeIn 1.2s ease; }
-        .active { display: flex; flex-direction: column; }
+        .screen { 
+            display: none; 
+            min-height: 100vh; 
+            width: 100%; 
+            animation: fadeIn 1.2s ease; 
+            flex-direction: column;
+        }
+        .active { 
+            display: flex; 
+        }
 
         /* --- GİRİŞ EKRANI --- */
-        #splash-screen { justify-content: center; align-items: center; position: relative; text-align: center; }
+        #splash-screen { 
+            justify-content: center; 
+            align-items: center; 
+            position: relative; 
+            text-align: center; 
+            padding: 20px;
+        }
         #bg-image-splash {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
-            opacity: 0.4; z-index: -1; filter: sepia(0.5) contrast(1.1) brightness(0.7);
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            opacity: 0.4; 
+            z-index: -1; 
+            filter: sepia(0.5) contrast(1.1) brightness(0.7);
         }
-        .title-container { z-index: 2; padding: 30px; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); }
-        .main-title { font-family: 'Cormorant Garamond', serif; font-size: 5rem; letter-spacing: 15px; margin: 0; color: #fff; }
+        .title-container { 
+            z-index: 2; 
+            padding: 25px; 
+            background: rgba(0,0,0,0.4); 
+            backdrop-filter: blur(8px); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 8px;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+        .main-title { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 3.5rem; 
+            letter-spacing: 8px; 
+            margin: 0; 
+            color: #fff; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            margin: 15px 0 25px;
+            color: #d4af37;
+            font-weight: 300;
+        }
         .enter-btn {
-            margin-top: 35px; background: transparent; color: #ddd; border: 1px solid rgba(255,255,255,0.5);
-            padding: 15px 40px; cursor: pointer; letter-spacing: 4px; transition: 0.4s;
+            margin-top: 25px; 
+            background: transparent; 
+            color: #ddd; 
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 12px 35px; 
+            cursor: pointer; 
+            letter-spacing: 3px; 
+            transition: 0.4s;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
-        .enter-btn:hover { background: #fff; color: #000; }
+        .enter-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255,255,255,0.15);
+            transition: width 0.4s ease;
+            z-index: -1;
+        }
+        .enter-btn:hover::after {
+            width: 100%;
+        }
+        .enter-btn:hover { 
+            background: rgba(255,255,255,0.1); 
+            color: #fff; 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
 
         /* --- MENÜ EKRANI --- */
         #menu-screen {
-            padding: 60px 20px;
-            background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1544967082-d9d25d867d66?q=80&w=2080&auto=format&fit=crop'); 
-            background-size: cover; background-attachment: fixed; background-position: center;
+            padding: 40px 20px 60px;
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1544967082-d9d25d867d66?q=80&w=2080&auto=format&fit=crop');
+            background-size: cover; 
+            background-attachment: scroll; 
+            background-position: center;
         }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .menu-header {
+            text-align: center; 
+            color: #d4af37; 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 2.2rem; 
+            letter-spacing: 4px; 
+            margin-bottom: 40px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 25px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 15px;
+        }
         .card {
-            height: 250px; display: flex; justify-content: center; align-items: center; cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; background: #000;
+            height: 220px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1); 
+            position: relative; 
+            overflow: hidden; 
+            background: #000;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.4s ease;
         }
-        .card:hover { transform: translateY(-5px); border-color: #d4af37; }
-        .card h2 { z-index: 2; letter-spacing: 4px; color: #fff; background: rgba(0,0,0,0.7); padding: 10px 20px; border: 1px solid rgba(255,255,255,0.2); text-transform: uppercase; }
-        .card-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.6; transition: 0.5s; filter: grayscale(80%); }
-        .card:hover .card-bg { transform: scale(1.1); opacity: 1; filter: grayscale(0%); }
+        .card:hover { 
+            transform: translateY(-8px); 
+            border-color: #d4af37; 
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+        .card h2 { 
+            z-index: 2; 
+            letter-spacing: 3px; 
+            color: #fff; 
+            background: rgba(0,0,0,0.75); 
+            padding: 8px 15px; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            text-align: center;
+            width: 90%;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .card:hover h2 {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+            letter-spacing: 4px;
+        }
+        .card-bg { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-size: cover; 
+            background-position: center; 
+            opacity: 0.65; 
+            transition: all 0.6s ease; 
+            filter: grayscale(70%) contrast(1.1);
+            transform: scale(1);
+        }
+        .card:hover .card-bg { 
+            transform: scale(1.1); 
+            opacity: 0.9; 
+            filter: grayscale(20%) contrast(1.2);
+        }
 
         /* --- PROJE DETAYI (KOLAJ MODU) --- */
         #detail-screen {
-            background-color: #f4f1ea; /* Eski kağıt rengi */
-            color: #2c2c2c; position: relative; overflow-x: hidden;
+            background-color: #f8f5f0; /* Eski kağıt rengi */
+            color: #2c2c2c; 
+            position: relative; 
+            overflow-x: hidden;
+            line-height: 1.7;
         }
 
         /* KOLAJ DEKORLARI (HANDMADE EFEKTLERİ) */
         .collage-item {
-            position: absolute; pointer-events: none; z-index: 0; opacity: 0.7;
-            mix-blend-mode: multiply; /* Kağıtla bütünleşmiş çizim etkisi */
+            position: absolute; 
+            pointer-events: none; 
+            z-index: 0; 
+            opacity: 0.7;
+            mix-blend-mode: multiply; 
             filter: contrast(1.2) sepia(0.3) grayscale(100%);
+            transition: all 0.5s ease;
         }
         
         /* 1. Antik Sütun (Sol Üst) */
         .decor-column {
-            top: 150px; left: -50px; width: 300px; transform: rotate(-5deg);
+            top: 120px; 
+            left: -40px; 
+            width: 250px; 
+            transform: rotate(-5deg);
         }
         
         /* 2. Antik Heykel Eskizi (Sağ Orta) */
         .decor-statue {
-            top: 800px; right: -80px; width: 400px; opacity: 0.5;
+            top: 700px; 
+            right: -60px; 
+            width: 320px; 
+            opacity: 0.45;
         }
 
         /* 3. Bitki/Doğa Eskizi (Sol Alt) */
         .decor-plant {
-            bottom: 100px; left: -50px; width: 350px; transform: rotate(10deg);
+            bottom: 80px; 
+            left: -40px; 
+            width: 280px; 
+            transform: rotate(8deg);
         }
 
         /* 4. Vitruvius Adamı / Mimari Çizim (Sağ Üst Köşe) */
         .decor-arch {
-            top: 50px; right: 20px; width: 200px; opacity: 0.4;
+            top: 40px; 
+            right: 20px; 
+            width: 180px; 
+            opacity: 0.35;
         }
 
-        .project-container { max-width: 1400px; margin: 0 auto; padding: 40px; position: relative; z-index: 1; }
+        .project-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 30px 20px; 
+            position: relative; 
+            z-index: 1; 
+        }
 
         .light-header {
-            text-align: center; margin-bottom: 60px; padding: 40px 0; border-bottom: 2px solid #d4af37; background: rgba(255,255,255,0.5); backdrop-filter: blur(5px);
+            text-align: center; 
+            margin-bottom: 45px; 
+            padding: 30px 0; 
+            border-bottom: 2px solid #d4af37; 
+            background: rgba(255,255,255,0.6); 
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-        .light-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 4rem; color: #111; letter-spacing: 5px; margin: 0; text-transform: uppercase; }
-        .light-header p { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #555; letter-spacing: 3px; margin-top: 10px; font-style: italic; }
+        .light-header h1 { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 3.2rem; 
+            color: #111; 
+            letter-spacing: 4px; 
+            margin: 0; 
+            text-transform: uppercase;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .light-header p { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 1.4rem; 
+            color: #555; 
+            letter-spacing: 2px; 
+            margin-top: 12px; 
+            font-style: italic;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-        .board-section { margin-bottom: 80px; display: flex; justify-content: center; position: relative; }
+        .board-section { 
+            margin-bottom: 60px; 
+            display: flex; 
+            justify-content: center; 
+            position: relative;
+            padding: 0 15px;
+        }
 
         /* Pafta Görsel Ayarları */
         .pafta-img { 
-            width: 100%; max-width: 1200px; height: auto; 
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.2); 
-            border: 10px solid #fff; /* Paspartu çerçeve */
+            width: 100%; 
+            max-width: 1100px; 
+            height: auto; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25); 
+            border: 12px solid #fff; 
             background-color: #fff; 
+            border-radius: 4px;
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.4s ease;
+        }
+        .pafta-img:hover {
+            transform: scale(1.01);
         }
 
         .back-btn-light {
-            position: fixed; top: 30px; left: 30px; padding: 10px 25px; background: #111; color: #fff; border: none; 
-            cursor: pointer; z-index: 100; text-transform: uppercase; font-family: 'Montserrat', sans-serif; transition: 0.3s;
+            position: fixed; 
+            top: 20px; 
+            left: 20px; 
+            padding: 10px 22px; 
+            background: #111; 
+            color: #fff; 
+            border: none; 
+            cursor: pointer; 
+            z-index: 100; 
+            text-transform: uppercase; 
+            font-family: 'Montserrat', sans-serif; 
+            transition: all 0.3s ease;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 0.95rem;
+            letter-spacing: 1px;
         }
-        .back-btn-light:hover { background: #d4af37; color: #fff; }
+        .back-btn-light:hover { 
+            background: #d4af37; 
+            color: #000; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Footer credit section */
+        .project-credit {
+            text-align: center; 
+            margin-top: 40px; 
+            padding-top: 25px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            color: #666;
+            font-style: italic;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            .decor-column { width: 200px; top: 100px; left: -30px; }
+            .decor-statue { width: 280px; top: 650px; right: -50px; }
+            .decor-plant { width: 240px; bottom: 70px; left: -30px; }
+            .decor-arch { width: 150px; top: 30px; right: 15px; }
+            
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+            .card { height: 200px; }
+            .menu-header { font-size: 2rem; }
+        }
+        
+        @media (max-width: 768px) {
+            /* Hide decorative elements on tablets to improve performance and readability */
+            .decor-column, .decor-statue, .decor-plant, .decor-arch {
+                opacity: 0.4;
+                transform: scale(0.9);
+            }
+            
+            .main-title { font-size: 2.8rem; letter-spacing: 5px; }
+            .subtitle { font-size: 1.5rem; margin: 10px 0 20px; }
+            .enter-btn { padding: 10px 30px; font-size: 1rem; letter-spacing: 2px; }
+            .title-container { padding: 20px 15px; }
+            
+            .menu-header { font-size: 1.9rem; letter-spacing: 3px; }
+            .grid-container { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+            .card { height: 190px; }
+            .card h2 { font-size: 1.2rem; padding: 7px 12px; letter-spacing: 2px; }
+            
+            .light-header h1 { font-size: 2.6rem; letter-spacing: 3px; }
+            .light-header p { font-size: 1.25rem; letter-spacing: 1.5px; }
+            .project-container { padding: 25px 15px; }
+            .board-section { margin-bottom: 45px; }
+            
+            .back-btn-light { padding: 8px 18px; font-size: 0.9rem; }
+        }
+        
+        @media (max-width: 480px) {
+            /* Hide decorative elements on mobile for better performance and readability */
+            .collage-item { display: none; }
+            
+            #bg-image-splash { opacity: 0.35; }
+            .main-title { font-size: 2.3rem; letter-spacing: 4px; }
+            .subtitle { font-size: 1.35rem; margin: 8px 0 18px; }
+            .enter-btn { 
+                padding: 10px 25px; 
+                font-size: 0.95rem; 
+                letter-spacing: 1.5px;
+                margin-top: 20px;
+            }
+            .title-container { 
+                padding: 20px 15px;
+                max-width: 95%;
+            }
+            
+            #menu-screen { padding: 30px 15px 45px; }
+            .menu-header { 
+                font-size: 1.75rem; 
+                letter-spacing: 2.5px;
+                margin-bottom: 30px;
+            }
+            .grid-container { 
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+                gap: 15px;
+                padding: 0 5px;
+            }
+            .card { 
+                height: 170px; 
+                border-radius: 6px;
+            }
+            .card h2 { 
+                font-size: 1.15rem; 
+                padding: 6px 10px; 
+                letter-spacing: 1.5px;
+                width: 95%;
+            }
+            
+            .light-header { 
+                padding: 25px 15px; 
+                margin-bottom: 35px;
+            }
+            .light-header h1 { 
+                font-size: 2.2rem; 
+                letter-spacing: 2.5px;
+            }
+            .light-header p { 
+                font-size: 1.15rem; 
+                letter-spacing: 1px;
+            }
+            .project-container { padding: 20px 10px; }
+            .board-section { margin-bottom: 35px; }
+            .pafta-img { max-width: 100%; border-width: 8px; }
+            
+            .back-btn-light { 
+                top: 15px; 
+                left: 15px; 
+                padding: 7px 16px; 
+                font-size: 0.85rem;
+                border-radius: 25px;
+            }
+            
+            .project-credit { 
+                font-size: 0.95rem; 
+                margin-top: 30px; 
+                padding-top: 20px;
+            }
+        }
+        
+        /* Additional accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .card:hover, .enter-btn:hover {
+                transform: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -114,34 +497,55 @@
     <div id="splash-screen" class="screen active">
         <img id="bg-image-splash" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop">
         <div class="title-container">
-            <h1 class="main-title" style="font-size: 3rem; letter-spacing: 5px; font-family: 'Montserrat', sans-serif;">ANTİK BELLEK</h1>
             <h1 class="main-title">ATTÂLEİA</h1>
+            <div class="subtitle">ANTİK BELLEK</div>
             <button class="enter-btn" onclick="showScreen('menu-screen')">KEŞFET</button>
         </div>
     </div>
 
     <div id="menu-screen" class="screen">
-        <h2 style="text-align: center; color: #d4af37; font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; letter-spacing: 5px; margin-bottom: 50px;">ANTİK ROTALAR</h2>
+        <h2 class="menu-header">ANTİK ROTALAR</h2>
         <div class="grid-container">
             <div class="card" onclick="openProject('olimpos')">
-                <div class="card-bg" style="background-image: url('olimpos_kapak.jpg'); opacity: 1; filter: grayscale(0%);"></div>
+                <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1593692908401-3824f4e9f95e?q=80&w=2070&auto=format&fit=crop');"></div>
                 <h2>OLİMPOS</h2>
             </div>
             <div class="card" onclick="alert('Yakında...')">
-                <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1628624747186-a941c72f6111?q=80&w=2070&auto=format&fit=crop');"></div> <h2>FASELİS</h2>
+                <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1628624747186-a941c72f6111?q=80&w=2070&auto=format&fit=crop');"></div>
+                <h2>FASELİS</h2>
             </div>
             <div class="card" onclick="alert('Yakında...')">
-                <div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Limyra_Theater_2.jpg/1200px-Limyra_Theater_2.jpg');"></div> <h2>LİMRA</h2>
+                <div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Limyra_Theater_2.jpg/1200px-Limyra_Theater_2.jpg');"></div>
+                <h2>LİMRA</h2>
             </div>
             <div class="card" onclick="alert('Yakında...')">
-                <div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Perge_Stadium_Antalya_Turkey.jpg/1280px-Perge_Stadium_Antalya_Turkey.jpg');"></div> <h2>PERGE</h2>
+                <div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Perge_Stadium_Antalya_Turkey.jpg/1280px-Perge_Stadium_Antalya_Turkey.jpg');"></div>
+                <h2>PERGE</h2>
             </div>
-             <div class="card" onclick="alert('Yakında...')"><div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1596305597365-74892c578499?q=80&w=2070&auto=format&fit=crop');"></div><h2>ASPENDOS</h2></div>
-            <div class="card" onclick="alert('Yakında...')"><div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1599587424911-37d363e84606?q=80&w=1974&auto=format&fit=crop');"></div><h2>SİDE</h2></div>
-            <div class="card" onclick="alert('Yakında...')"><div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Patara_Theatre.jpg/1280px-Patara_Theatre.jpg');"></div><h2>PATARA</h2></div>
-            <div class="card" onclick="alert('Yakında...')"><div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ea/Xanthos_Nereid_Monument_BM.jpg');"></div><h2>XANTHOS</h2></div>
-            <div class="card" onclick="alert('Yakında...')"><div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1533283733077-88220807b029?q=80&w=2070&auto=format&fit=crop');"></div><h2>MYRA</h2></div>
-            <div class="card" onclick="alert('Yakında...')"><div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Termessos_Theatre_Antalya_Turkey.jpg/1280px-Termessos_Theatre_Antalya_Turkey.jpg');"></div><h2>TERMESSOS</h2></div>
+            <div class="card" onclick="alert('Yakında...')">
+                <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1596305597365-74892c578499?q=80&w=2070&auto=format&fit=crop');"></div>
+                <h2>ASPENDOS</h2>
+            </div>
+            <div class="card" onclick="alert('Yakında...')">
+                <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1599587424911-37d363e84606?q=80&w=1974&auto=format&fit=crop');"></div>
+                <h2>SİDE</h2>
+            </div>
+            <div class="card" onclick="alert('Yakında...')">
+                <div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Patara_Theatre.jpg/1280px-Patara_Theatre.jpg');"></div>
+                <h2>PATARA</h2>
+            </div>
+            <div class="card" onclick="alert('Yakında...')">
+                <div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ea/Xanthos_Nereid_Monument_BM.jpg');"></div>
+                <h2>XANTHOS</h2>
+            </div>
+            <div class="card" onclick="alert('Yakında...')">
+                <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1533283733077-88220807b029?q=80&w=2070&auto=format&fit=crop');"></div>
+                <h2>MYRA</h2>
+            </div>
+            <div class="card" onclick="alert('Yakında...')">
+                <div class="card-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Termessos_Theatre_Antalya_Turkey.jpg/1280px-Termessos_Theatre_Antalya_Turkey.jpg');"></div>
+                <h2>TERMESSOS</h2>
+            </div>
         </div>
     </div>
 
@@ -161,18 +565,18 @@
             </div>
 
             <div class="board-section">
-                <img src="pafta1.jpg" class="pafta-img" alt="Pafta 1 - Konsept">
+                <img src="https://images.unsplash.com/photo-1593692908401-3824f4e9f95e?q=80&w=2070&auto=format&fit=crop" class="pafta-img" alt="Pafta 1 - Konsept">
             </div>
             
             <div class="board-section">
-                <img src="pafta2.jpg" class="pafta-img" alt="Pafta 2 - Analiz">
+                <img src="https://images.unsplash.com/photo-1589939705384-51853859a70a?q=80&w=2070&auto=format&fit=crop" class="pafta-img" alt="Pafta 2 - Analiz">
             </div>
             
             <div class="board-section">
-                <img src="pafta3.jpg" class="pafta-img" alt="Pafta 3 - Proje">
+                <img src="https://images.unsplash.com/photo-1564039933306-9f5e6b1abc4a?q=80&w=2070&auto=format&fit=crop" class="pafta-img" alt="Pafta 3 - Proje">
             </div>
 
-             <div style="text-align: center; margin-top: 50px; opacity: 0.6; font-style: italic;">
+            <div class="project-credit">
                 <p>Beykent Üniversitesi Mimarlık Bölümü - 2025/2026 Güz Dönemi</p>
             </div>
         </div>
@@ -184,7 +588,35 @@
             document.getElementById(screenId).classList.add('active');
             window.scrollTo(0, 0);
         }
-        function openProject(p) { if(p === 'olimpos') showScreen('detail-screen'); }
+        
+        function openProject(p) { 
+            if(p === 'olimpos') showScreen('detail-screen'); 
+        }
+        
+        // Add touch support for cards on mobile devices
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('touchstart', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                card.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // Preload images for better performance
+            const imagesToPreload = [
+                'https://images.unsplash.com/photo-1593692908401-3824f4e9f95e?q=80&w=2070&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1589939705384-51853859a70a?q=80&w=2070&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1564039933306-9f5e6b1abc4a?q=80&w=2070&auto=format&fit=crop'
+            ];
+            
+            imagesToPreload.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        });
     </script>
 </body>
 </html>
